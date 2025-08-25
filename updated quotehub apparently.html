@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuoteHub | The Sierra Suites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="assets/logo-icon.svg" alt="The Sierra Suites Logo">
+                    <span>The Sierra Suites</span>
+                </div>
+                <button class="sidebar-toggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="assets/user-avatar.jpg" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h4>John Contractor</h4>
+                    <p>Johnson Builders</p>
+                </div>
+                <button class="profile-menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="taskflow.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>TaskFlow</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="fieldsnap.html">
+                            <i class="fas fa-camera"></i>
+                            <span>FieldSnap</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="quotehub.html">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>QuoteHub</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reportcenter.html">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>ReportCenter</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-users"></i>
+                            <span>CRM</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Proposals</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tools"></i>
+                            <span>Subcontractors</span>
+                            <span class="upgrade-badge">Enterprise</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="upgrade-card">
+                    <h4>Upgrade to Pro</h4>
+                    <p>Unlock professional estimate templates and client approval tracking</p>
+                    <a href="pricing.html" class="btn btn-primary btn-small">Upgrade Now</a>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>QuoteHub</h2>
+                    <div class="status-filter">
+                        <select id="status-filter">
+                            <option value="all">All Statuses</option>
+                            <option value="draft">Draft</option>
+                            <option value="sent">Sent</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search estimates..." id="search-input">
+                    </div>
+                    <div class="topbar-actions">
+                        <button class="btn btn-primary" id="new-estimate-btn">
+                            <i class="fas fa-plus"></i>
+                            New Estimate
+                        </button>
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">1</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-container">
+                <div class="estimates-summary">
+                    <div class="summary-card">
+                        <h4>Total Estimates</h4>
+                        <p class="summary-value" id="total-estimates">12</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Pending Approval</h4>
+                        <p class="summary-value" id="pending-estimates">3</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Approved</h4>
+                        <p class="summary-value" id="approved-estimates">7</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Total Value</h4>
+                        <p class="summary-value" id="total-value">$84,500</p>
+                    </div>
+                </div>
+                
+                <div class="estimates-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div class="table-col">Estimate #</div>
+                            <div class="table-col">Project</div>
+                            <div class="table-col">Client</div>
+                            <div class="table-col">Date</div>
+                            <div class="table-col">Amount</div>
+                            <div class="table-col">Status</div>
+                            <div class="table-col">Actions</div>
+                        </div>
+                    </div>
+                    <div class="table-body" id="estimates-list">
+                        <!-- Estimates will be loaded dynamically -->
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <button class="btn btn-outline" id="prev-page" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div class="page-numbers" id="page-numbers">
+                        <span class="active">1</span>
+                        <span>2</span>
+                        <span>3</span>
+                    </div>
+                    <button class="btn btn-outline" id="next-page">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Estimate Modal -->
+    <div class="modal" id="estimate-modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Create New Estimate</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="estimate-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="estimate-project">Project</label>
+                            <select id="estimate-project">
+                                <option value="">Select Project</option>
+                                <!-- Projects will be loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="estimate-client">Client</label>
+                            <select id="estimate-client">
+                                <option value="">Select Client</option>
+                                <!-- Clients will be loaded dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="estimate-template">Template</label>
+                            <select id="estimate-template">
+                                <option value="">Select Template</option>
+                                <option value="kitchen">Kitchen Renovation</option>
+                                <option value="bathroom">Bathroom Remodel</option>
+                                <option value="residential">Residential Addition</option>
+                                <option value="commercial">Commercial Build</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="estimate-date">Estimate Date</label>
+                            <input type="date" id="estimate-date">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estimate-notes">Notes (optional)</label>
+                        <textarea id="estimate-notes" placeholder="Add any notes for this estimate"></textarea>
+                    </div>
+                    
+                    <div class="line-items">
+                        <div class="line-items-header">
+                            <h4>Line Items</h4>
+                            <button class="btn btn-outline btn-small" id="add-line-item">
+                                <i class="fas fa-plus"></i>
+                                Add Item
+                            </button>
+                        </div>
+                        
+                        <div class="line-items-table">
+                            <div class="table-header">
+                                <div class="table-col">Item</div>
+                                <div class="table-col">Description</div>
+                                <div class="table-col">Qty</div>
+                                <div class="table-col">Unit Price</div>
+                                <div class="table-col">Total</div>
+                                <div class="table-col">Actions</div>
+                            </div>
+                            <div class="table-body" id="line-items-body">
+                                <div class="table-row line-item">
+                                    <div class="table-col">
+                                        <input type="text" placeholder="Item name" class="item-name">
+                                    </div>
+                                    <div class="table-col">
+                                        <input type="text" placeholder="Description" class="item-description">
+                                    </div>
+                                    <div class="table-col">
+                                        <input type="number" placeholder="Qty" class="item-quantity" value="1" min="1">
+                                    </div>
+                                    <div class="table-col">
+                                        <input type="number" placeholder="Unit Price" class="item-price" value="0" min="0" step="0.01">
+                                    </div>
+                                    <div class="table-col item-total">
+                                        <span>$0.00</span>
+                                    </div>
+                                    <div class="table-col actions">
+                                        <button class="btn btn-icon remove-item">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="line-items-footer">
+                            <button class="btn btn-link" id="add-discount">
+                                <i class="fas fa-plus-circle"></i>
+                                Add Discount
+                            </button>
+                            <button class="btn btn-link" id="add-tax">
+                                <i class="fas fa-plus-circle"></i>
+                                Add Tax
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="estimate-totals">
+                        <div class="totals-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="totals-row discount-row" style="display: none;">
+                            <span>Discount (<span id="discount-percentage">0</span>%)</span>
+                            <span id="discount-amount">-$0.00</span>
+                        </div>
+                        <div class="totals-row tax-row" style="display: none;">
+                            <span>Tax (<span id="tax-percentage">0</span>%)</span>
+                            <span id="tax-amount">$0.00</span>
+                        </div>
+                        <div class="totals-row grand-total">
+                            <span>Total</span>
+                            <span id="grand-total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="save-draft">Save Draft</button>
+                <button class="btn btn-primary" id="save-send">Save & Send to Client</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Estimate Modal -->
+    <div class="modal" id="view-estimate-modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Estimate Details</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="estimate-details">
+                    <div class="details-header">
+                        <div>
+                            <h4 id="view-estimate-number">EST-2023-0012</h4>
+                            <p id="view-estimate-date">Date: Jun 10, 2023</p>
+                        </div>
+                        <div>
+                            <span class="status-badge" id="view-estimate-status">Approved</span>
+                        </div>
+                    </div>
+                    
+                    <div class="details-client">
+                        <h4>Client Information</h4>
+                        <p id="view-client-name">Johnson Family</p>
+                        <p id="view-client-email">johnson@example.com</p>
+                        <p id="view-client-phone">(555) 123-4567</p>
+                    </div>
+                    
+                    <div class="details-project">
+                        <h4>Project</h4>
+                        <p id="view-project-name">Maple Street Renovation</p>
+                        <p id="view-project-address">123 Maple St, Anytown, USA</p>
+                    </div>
+                    
+                    <div class="details-items">
+                        <h4>Line Items</h4>
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="view-items-list">
+                                <!-- Items will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="details-totals">
+                        <div class="totals-row">
+                            <span>Subtotal</span>
+                            <span id="view-subtotal">$0.00</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Discount</span>
+                            <span id="view-discount">-$0.00</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Tax</span>
+                            <span id="view-tax">$0.00</span>
+                        </div>
+                        <div class="totals-row grand-total">
+                            <span>Total</span>
+                            <span id="view-grand-total">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="details-notes">
+                        <h4>Notes</h4>
+                        <p id="view-notes">No notes provided.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="download-pdf">
+                    <i class="fas fa-download"></i>
+                    Download PDF
+                </button>
+                <button class="btn btn-primary" id="send-reminder">
+                    <i class="fas fa-envelope"></i>
+                    Send Reminder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://qjswuwcqyzeuqqqltykz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqc3d1d2NxeXpldXFxcWx0eWt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyMjk0MDUsImV4cCI6MjA3MDgwNTQwNX0.qgH8DMJEoJVuYOXSyr0RAj01Yt7bBR8EYL6qw3YXyAs';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Global variables
+        let currentUser = null;
+        let currentCompanyId = null;
+        let estimates = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+        });
+        
+        // Initialize the application
+        async function initializeApp() {
+            // Check authentication
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                await loadUserCompanyData();
+                await loadEstimates();
+                await loadProjects();
+                await loadClients();
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Load user company data
+        async function loadUserCompanyData() {
+            const { data, error } = await supabase
+                .from('user_companies')
+                .select('company_id, companies(subscription_tier)')
+                .eq('user_id', currentUser.id)
+                .single();
+            
+            if (data) {
+                currentCompanyId = data.company_id;
+                // You can use subscription tier to enable/disable features
+            }
+        }
+        
+        // Load estimates from Supabase
+        async function loadEstimates() {
+            const { data, error } = await supabase
+                .from('estimates')
+                .select(`
+                    *,
+                    projects(name),
+                    clients(name, email, phone)
+                `)
+                .eq('company_id', currentCompanyId)
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error loading estimates:', error);
+                showNotification('Failed to load estimates', 'error');
+                return;
+            }
+            
+            estimates = data || [];
+            renderEstimates();
+            updateSummary();
+        }
+        
+        // Load projects for dropdown
+        async function loadProjects() {
+            const { data, error } = await supabase
+                .from('projects')
+                .select('id, name')
+                .eq('company_id', currentCompanyId)
+                .eq('status', 'active')
+                .order('name');
+            
+            if (error) {
+                console.error('Error loading projects:', error);
+                return;
+            }
+            
+            const projectSelect = document.getElementById('estimate-project');
+            projectSelect.innerHTML = '<option value="">Select Project</option>';
+            
+            data.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                projectSelect.appendChild(option);
+            });
+        }
+        
+        // Load clients for dropdown
+        async function loadClients() {
+            const { data, error } = await supabase
+                .from('clients')
+                .select('id, name')
+                .eq('company_id', currentCompanyId)
+                .order('name');
+            
+            if (error) {
+                console.error('Error loading clients:', error);
+                return;
+            }
+            
+            const clientSelect = document.getElementById('estimate-client');
+            clientSelect.innerHTML = '<option value="">Select Client</option>';
+            
+            data.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = client.name;
+                clientSelect.appendChild(option);
+            });
+        }
+        
+        // Render estimates in the table
+        function renderEstimates() {
+            const estimatesList = document.getElementById('estimates-list');
+            estimatesList.innerHTML = '';
+            
+            // Apply filters
+            const statusFilter = document.getElementById('status-filter').value;
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            let filteredEstimates = estimates;
+            
+            if (statusFilter !== 'all') {
+                filteredEstimates = filteredEstimates.filter(estimate => estimate.status === statusFilter);
+            }
+            
+            if (searchTerm) {
+                filteredEstimates = filteredEstimates.filter(estimate => 
+                    estimate.estimate_number.toLowerCase().includes(searchTerm) ||
+                    estimate.projects.name.toLowerCase().includes(searchTerm) ||
+                    estimate.clients.name.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Pagination
+            const totalPages = Math.ceil(filteredEstimates.length / itemsPerPage);
+            updatePagination(totalPages);
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedEstimates = filteredEstimates.slice(startIndex, startIndex + itemsPerPage);
+            
+            if (paginatedEstimates.length === 0) {
+                estimatesList.innerHTML = `
+                    <div class="table-row">
+                        <div class="table-col" colspan="7" style="text-align: center; padding: 20px;">
+                            No estimates found
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            paginatedEstimates.forEach(estimate => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div class="table-col">${estimate.estimate_number}</div>
+                    <div class="table-col">${estimate.projects.name}</div>
+                    <div class="table-col">${estimate.clients.name}</div>
+                    <div class="table-col">${new Date(estimate.estimate_date).toLocaleDateString()}</div>
+                    <div class="table-col">$${estimate.total_amount.toLocaleString()}</div>
+                    <div class="table-col">
+                        <span class="status-badge ${estimate.status}">${estimate.status.charAt(0).toUpperCase() + estimate.status.slice(1)}</span>
+                    </div>
+                    <div class="table-col actions">
+                        <button class="btn btn-icon view-estimate" data-id="${estimate.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-icon download-estimate" data-id="${estimate.id}">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn btn-icon more-actions" data-id="${estimate.id}">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                `;
+                estimatesList.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.view-estimate').forEach(button => {
+                button.addEventListener('click', () => viewEstimate(button.dataset.id));
+            });
+            
+            document.querySelectorAll('.download-estimate').forEach(button => {
+                button.addEventListener('click', () => downloadEstimate(button.dataset.id));
+            });
+            
+            document.querySelectorAll('.more-actions').forEach(button => {
+                button.addEventListener('click', () => showMoreActions(button.dataset.id));
+            });
+        }
+        
+        // Update summary cards
+        function updateSummary() {
+            const totalEstimates = estimates.length;
+            const pendingEstimates = estimates.filter(e => e.status === 'pending').length;
+            const approvedEstimates = estimates.filter(e => e.status === 'approved').length;
+            const totalValue = estimates.reduce((sum, estimate) => sum + estimate.total_amount, 0);
+            
+            document.getElementById('total-estimates').textContent = totalEstimates;
+            document.getElementById('pending-estimates').textContent = pendingEstimates;
+            document.getElementById('approved-estimates').textContent = approvedEstimates;
+            document.getElementById('total-value').textContent = `$${totalValue.toLocaleString()}`;
+        }
+        
+        // Update pagination controls
+        function updatePagination(totalPages) {
+            const pageNumbers = document.getElementById('page-numbers');
+            const prevButton = document.getElementById('prev-page');
+            const nextButton = document.getElementById('next-page');
+            
+            pageNumbers.innerHTML = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const page = document.createElement('span');
+                page.textContent = i;
+                if (i === currentPage) {
+                    page.className = 'active';
+                }
+                page.addEventListener('click', () => {
+                    currentPage = i;
+                    renderEstimates();
+                });
+                pageNumbers.appendChild(page);
+            }
+            
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+            
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderEstimates();
+                }
+            });
+            
+            nextButton.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderEstimates();
+                }
+            });
+        }
+        
+        // View estimate details
+        async function viewEstimate(estimateId) {
+            const { data, error } = await supabase
+                .from('estimates')
+                .select(`
+                    *,
+                    projects(name, address),
+                    clients(name, email, phone),
+                    estimate_items(*)
+                `)
+                .eq('id', estimateId)
+                .single();
+            
+            if (error) {
+                console.error('Error loading estimate:', error);
+                showNotification('Failed to load estimate details', 'error');
+                return;
+            }
+            
+            // Populate the view modal
+            document.getElementById('view-estimate-number').textContent = data.estimate_number;
+            document.getElementById('view-estimate-date').textContent = `Date: ${new Date(data.estimate_date).toLocaleDateString()}`;
+            document.getElementById('view-estimate-status').textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+            document.getElementById('view-estimate-status').className = `status-badge ${data.status}`;
+            
+            document.getElementById('view-client-name').textContent = data.clients.name;
+            document.getElementById('view-client-email').textContent = data.clients.email;
+            document.getElementById('view-client-phone').textContent = data.clients.phone;
+            
+            document.getElementById('view-project-name').textContent = data.projects.name;
+            document.getElementById('view-project-address').textContent = data.projects.address;
+            
+            // Populate line items
+            const itemsList = document.getElementById('view-items-list');
+            itemsList.innerHTML = '';
+            
+            data.estimate_items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.unit_price.toFixed(2)}</td>
+                    <td>$${(item.quantity * item.unit_price).toFixed(2)}</td>
+                `;
+                itemsList.appendChild(row);
+            });
+            
+            // Populate totals
+            document.getElementById('view-subtotal').textContent = `$${data.subtotal.toFixed(2)}`;
+            document.getElementById('view-discount').textContent = `-$${data.discount_amount.toFixed(2)}`;
+            document.getElementById('view-tax').textContent = `$${data.tax_amount.toFixed(2)}`;
+            document.getElementById('view-grand-total').textContent = `$${data.total_amount.toFixed(2)}`;
+            
+            // Populate notes
+            document.getElementById('view-notes').textContent = data.notes || 'No notes provided.';
+            
+            // Show the modal
+            document.getElementById('view-estimate-modal').classList.add('active');
+        }
+        
+        // Download estimate as PDF
+        async function downloadEstimate(estimateId) {
+            const { data, error } = await supabase
+                .from('estimates')
+                .select(`
+                    *,
+                    projects(name, address),
+                    clients(name, email, phone),
+                    estimate_items(*),
+                    companies(name, address, phone, email)
+                `)
+                .eq('id', estimateId)
+                .single();
+            
+            if (error) {
+                console.error('Error loading estimate:', error);
+                showNotification('Failed to download estimate', 'error');
+                return;
+            }
+            
+            // Create PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add company info
+            doc.setFontSize(16);
+            doc.text(data.companies.name, 20, 20);
+            doc.setFontSize(10);
+            doc.text(data.companies.address, 20, 30);
+            doc.text(`Phone: ${data.companies.phone} | Email: ${data.companies.email}`, 20, 40);
+            
+            // Add estimate info
+            doc.setFontSize(14);
+            doc.text(`ESTIMATE: ${data.estimate_number}`, 20, 60);
+            doc.setFontSize(10);
+            doc.text(`Date: ${new Date(data.estimate_date).toLocaleDateString()}`, 20, 70);
+            doc.text(`Status: ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}`, 20, 80);
+            
+            // Add client info
+            doc.text(`Client: ${data.clients.name}`, 20, 100);
+            doc.text(`Email: ${data.clients.email}`, 20, 110);
+            doc.text(`Phone: ${data.clients.phone}`, 20, 120);
+            
+            // Add project info
+            doc.text(`Project: ${data.projects.name}`, 20, 140);
+            doc.text(`Address: ${data.projects.address}`, 20, 150);
+            
+            // Add line items
+            doc.setFontSize(12);
+            doc.text('Description', 20, 170);
+            doc.text('Qty', 120, 170);
+            doc.text('Unit Price', 140, 170);
+            doc.text('Total', 170, 170);
+            
+            let y = 180;
+            data.estimate_items.forEach(item => {
+                doc.setFontSize(10);
+                doc.text(item.description, 20, y);
+                doc.text(item.quantity.toString(), 120, y);
+                doc.text(`$${item.unit_price.toFixed(2)}`, 140, y);
+                doc.text(`$${(item.quantity * item.unit_price).toFixed(2)}`, 170, y);
+                y += 10;
+            });
+            
+            // Add totals
+            y += 10;
+            doc.text(`Subtotal: $${data.subtotal.toFixed(2)}`, 140, y);
+            y += 10;
+            doc.text(`Discount: -$${data.discount_amount.toFixed(2)}`, 140, y);
+            y += 10;
+            doc.text(`Tax: $${data.tax_amount.toFixed(2)}`, 140, y);
+            y += 10;
+            doc.setFontSize(12);
+            doc.text(`TOTAL: $${data.total_amount.toFixed(2)}`, 140, y);
+            
+            // Add notes
+            if (data.notes) {
+                y += 20;
+                doc.setFontSize(10);
+                doc.text('Notes:', 20, y);
+                y += 10;
+                const splitNotes = doc.splitTextToSize(data.notes, 170);
+                doc.text(splitNotes, 20, y);
+            }
+            
+            // Save the PDF
+            doc.save(`Estimate-${data.estimate_number}.pdf`);
+        }
+        
+        // Show more actions menu
+        function showMoreActions(estimateId) {
+            // This would typically show a context menu with options like Edit, Duplicate, Delete, etc.
+            // For simplicity, we'll just show an alert
+            alert(`More actions for estimate ${estimateId}`);
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // New estimate button
+            document.getElementById('new-estimate-btn').addEventListener('click', () => {
+                document.getElementById('estimate-modal').classList.add('active');
+            });
+            
+            // Modal close buttons
+            document.querySelectorAll('.modal-close').forEach(button => {
+                button.addEventListener('click', () => {
+                    button.closest('.modal').classList.remove('active');
+                });
+            });
+            
+            // Filter and search
+            document.getElementById('status-filter').addEventListener('change', renderEstimates);
+            document.getElementById('search-input').addEventListener('input', renderEstimates);
+            
+            // Line item calculations
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('item-quantity') || e.target.classList.contains('item-price')) {
+                    calculateLineItemTotal(e.target.closest('.line-item'));
+                    calculateEstimateTotal();
+                }
+            });
+            
+            // Add line item
+            document.getElementById('add-line-item').addEventListener('click', addLineItem);
+            
+            // Remove line item
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-item')) {
+                    e.target.closest('.line-item').remove();
+                    calculateEstimateTotal();
+                }
+            });
+            
+            // Add discount
+            document.getElementById('add-discount').addEventListener('click', addDiscount);
+            
+            // Add tax
+            document.getElementById('add-tax').addEventListener('click', addTax);
+            
+            // Save draft
+            document.getElementById('save-draft').addEventListener('click', () => saveEstimate('draft'));
+            
+            // Save and send
+            document.getElementById('save-send').addEventListener('click', () => saveEstimate('sent'));
+        }
+        
+        // Calculate line item total
+        function calculateLineItemTotal(lineItem) {
+            const quantity = parseFloat(lineItem.querySelector('.item-quantity').value) || 0;
+            const price = parseFloat(lineItem.querySelector('.item-price').value) || 0;
+            const total = quantity * price;
+            
+            lineItem.querySelector('.item-total span').textContent = `$${total.toFixed(2)}`;
+        }
+        
+        // Calculate estimate total
+        function calculateEstimateTotal() {
+            let subtotal = 0;
+            
+            document.querySelectorAll('.line-item').forEach(item => {
+                const quantity = parseFloat(item.querySelector('.item-quantity').value) || 0;
+                const price = parseFloat(item.querySelector('.item-price').value) || 0;
+                subtotal += quantity * price;
+            });
+            
+            const discountPercentage = parseFloat(document.getElementById('discount-percentage').textContent) || 0;
+            const discountAmount = subtotal * (discountPercentage / 100);
+            
+            const taxPercentage = parseFloat(document.getElementById('tax-percentage').textContent) || 0;
+            const taxAmount = (subtotal - discountAmount) * (taxPercentage / 100);
+            
+            const total = subtotal - discountAmount + taxAmount;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('discount-amount').textContent = `-$${discountAmount.toFixed(2)}`;
+            document.getElementById('tax-amount').textContent = `$${taxAmount.toFixed(2)}`;
+            document.getElementById('grand-total').textContent = `$${total.toFixed(2)}`;
+        }
+        
+        // Add new line item
+        function addLineItem() {
+            const lineItemsBody = document.getElementById('line-items-body');
+            const newItem = document.createElement('div');
+            newItem.className = 'table-row line-item';
+            newItem.innerHTML = `
+                <div class="table-col">
+                    <input type="text" placeholder="Item name" class="item-name">
+                </div>
+                <div class="table-col">
+                    <input type="text" placeholder="Description" class="item-description">
+                </div>
+                <div class="table-col">
+                    <input type="number" placeholder="Qty" class="item-quantity" value="1" min="1">
+                </div>
+                <div class="table-col">
+                    <input type="number" placeholder="Unit Price" class="item-price" value="0" min="0" step="0.01">
+                </div>
+                <div class="table-col item-total">
+                    <span>$0.00</span>
+                </div>
+                <div class="table-col actions">
+                    <button class="btn btn-icon remove-item">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            lineItemsBody.appendChild(newItem);
+            
+            // Add event listeners to the new inputs
+            newItem.querySelector('.item-quantity').addEventListener('input', () => {
+                calculateLineItemTotal(newItem);
+                calculateEstimateTotal();
+            });
+            
+            newItem.querySelector('.item-price').addEventListener('input', () => {
+                calculateLineItemTotal(newItem);
+                calculateEstimateTotal();
+            });
+        }
+        
+        // Add discount
+        function addDiscount() {
+            const discountPercentage = prompt('Enter discount percentage:', '5');
+            if (discountPercentage !== null && !isNaN(discountPercentage)) {
+                document.getElementById('discount-percentage').textContent = discountPercentage;
+                document.querySelector('.discount-row').style.display = 'flex';
+                calculateEstimateTotal();
+            }
+        }
+        
+        // Add tax
+        function addTax() {
+            const taxPercentage = prompt('Enter tax percentage:', '7');
+            if (taxPercentage !== null && !isNaN(taxPercentage)) {
+                document.getElementById('tax-percentage').textContent = taxPercentage;
+                document.querySelector('.tax-row').style.display = 'flex';
+                calculateEstimateTotal();
+            }
+        }
+        
+        // Save estimate to Supabase
+        async function saveEstimate(status) {
+            const projectId = document.getElementById('estimate-project').value;
+            const clientId = document.getElementById('estimate-client').value;
+            const template = document.getElementById('estimate-template').value;
+            const date = document.getElementById('estimate-date').value;
+            const notes = document.getElementById('estimate-notes').value;
+            
+            if (!projectId || !clientId || !date) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Calculate totals
+            let subtotal = 0;
+            const lineItems = [];
+            
+            document.querySelectorAll('.line-item').forEach(item => {
+                const name = item.querySelector('.item-name').value;
+                const description = item.querySelector('.item-description').value;
+                const quantity = parseFloat(item.querySelector('.item-quantity').value) || 0;
+                const price = parseFloat(item.querySelector('.item-price').value) || 0;
+                const total = quantity * price;
+                
+                if (name && quantity > 0 && price > 0) {
+                    lineItems.push({
+                        name,
+                        description,
+                        quantity,
+                        unit_price: price,
+                        total
+                    });
+                    subtotal += total;
+                }
+            });
+            
+            if (lineItems.length === 0) {
+                showNotification('Please add at least one line item', 'error');
+                return;
+            }
+            
+            const discountPercentage = parseFloat(document.getElementById('discount-percentage').textContent) || 0;
+            const discountAmount = subtotal * (discountPercentage / 100);
+            
+            const taxPercentage = parseFloat(document.getElementById('tax-percentage').textContent) || 0;
+            const taxAmount = (subtotal - discountAmount) * (taxPercentage / 100);
+            
+            const totalAmount = subtotal - discountAmount + taxAmount;
+            
+            // Generate estimate number
+            const estimateCount = estimates.length + 1;
+            const estimateNumber = `EST-${new Date().getFullYear()}-${estimateCount.toString().padStart(4, '0')}`;
+            
+            // Save to Supabase
+            const { data: estimateData, error: estimateError } = await supabase
+                .from('estimates')
+                .insert({
+                    estimate_number: estimateNumber,
+                    company_id: currentCompanyId,
+                    project_id: projectId,
+                    client_id: clientId,
+                    estimate_date: date,
+                    subtotal: subtotal,
+                    discount_percentage: discountPercentage,
+                    discount_amount: discountAmount,
+                    tax_percentage: taxPercentage,
+                    tax_amount: taxAmount,
+                    total_amount: totalAmount,
+                    notes: notes,
+                    status: status,
+                    created_by: currentUser.id
+                })
+                .select()
+                .single();
+            
+            if (estimateError) {
+                console.error('Error saving estimate:', estimateError);
+                showNotification('Failed to save estimate', 'error');
+                return;
+            }
+            
+            // Save line items
+            for (const item of lineItems) {
+                const { error: itemError } = await supabase
+                    .from('estimate_items')
+                    .insert({
+                        estimate_id: estimateData.id,
+                        name: item.name,
+                        description: item.description,
+                        quantity: item.quantity,
+                        unit_price: item.unit_price,
+                        total: item.total
+                    });
+                
+                if (itemError) {
+                    console.error('Error saving line item:', itemError);
+                }
+            }
+            
+            showNotification('Estimate saved successfully!', 'success');
+            document.getElementById('estimate-modal').classList.remove('active');
+            
+            // Reload estimates
+            await loadEstimates();
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button class="notification-close">&times;</button>
+            `;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+            
+            // Close button
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            });
+        }
+        
+        // Add notification styles if not already added
+        if (!document.getElementById('notification-styles')) {
+            const styles = document.createElement('style');
+            styles.id = 'notification-styles';
+            styles.textContent = `
+                .notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 5px;
+                    color: white;
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    min-width: 300px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    animation: slideIn 0.3s ease;
+                }
+                
+                .notification-success { background-color: #10B981; }
+                .notification-error { background-color: #EF4444; }
+                .notification-info { background-color: #3B82F6; }
+                .notification-warning { background-color: #F59E0B; }
+                
+                .notification-close {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 20px;
+                    cursor: pointer;
+                    margin-left: 15px;
+                }
+                
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+    </script>
+</body>
+</html>
