@@ -179,7 +179,7 @@
 
         .btn-primary {
             background-color: var(--primary-color);
-            color: var(--white);
+            color: var(--white) !important;
         }
 
         .btn-primary * {
@@ -190,6 +190,7 @@
             background-color: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            color: var(--white) !important;
         }
 
         .btn-outline {
@@ -580,6 +581,18 @@
         }
 
         .limited-badge {
+            position: absolute;
+            top: -0.75rem;
+            right: 2rem;
+            background-color: var(--warning-color);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .package-badge {
             position: absolute;
             top: -0.75rem;
             right: 2rem;
@@ -1053,6 +1066,7 @@
                     <a href="register.html" class="btn btn-primary">Start Free Trial</a>
                 </div>
                 <div class="pricing-card">
+                    <div class="package-badge">All-In-One Package</div>
                     <h3>Enterprise</h3>
                     <div class="price">$199<span>/month</span></div>
                     <p class="price-description">For established contractors</p>
