@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | The Sierra Suites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary-color: #f97316;
+            --secondary-dark: #ea580c;
+            --secondary-light: #fb923c;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --text-lighter: #9ca3af;
+            --bg-color: #f9fafb;
+            --bg-dark: #f3f4f6;
+            --white: #ffffff;
+            --black: #000000;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 0.125rem;
+            --radius: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        .dashboard-page {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--white);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            z-index: 90;
+        }
+
+        .sidebar-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            height: 80px;
+        }
+
+        .sidebar-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .sidebar-header .logo img {
+            height: 2rem;
+            width: auto;
+            object-fit: contain;
+            border-radius: var(--radius);
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .user-profile {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        .profile-menu {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav ul {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-nav li {
+            position: relative;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-color);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-nav li a:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+        }
+
+        .sidebar-nav li a i {
+            width: 1.25rem;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav li.active a {
+            color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .sidebar-nav li.active:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--primary-color);
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .nav-divider {
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .upgrade-badge {
+            margin-left: auto;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: var(--radius-full);
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .upgrade-card {
+            background-color: rgba(37, 99, 235, 0.05);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .upgrade-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .upgrade-card p {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .topbar {
+            height: 80px;
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 80;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: none;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            border-radius: 50%;
+            background-color: transparent;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .date-navigation {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-navigation h3 {
+            font-size: 1rem;
+            margin-bottom: 0;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .view-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-selector button.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -0.25rem;
+            right: -0.25rem;
+            background-color: var(--danger-color);
+            color: var(--white);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            font-size: 0.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Content Container */
+        .content-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            background-color: var(--bg-color);
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .calendar-container {
+            flex: 1;
+            background-color: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .tasks-sidebar {
+            width: 350px;
+            background-color: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tasks-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tasks-header h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0;
+        }
+
+        .tasks-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .tasks-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Task Item Styles */
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: var(--radius);
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            margin-bottom: 0.75rem;
+        }
+
+        .task-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+        }
+
+        .task-item.completed .task-content h4 {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        .task-item.priority-high {
+            border-left: 3px solid var(--danger-color);
+        }
+
+        .task-item.priority-medium {
+            border-left: 3px solid var(--warning-color);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-content h4 {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-content p {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .task-meta i {
+            margin-right: 0.25rem;
+        }
+
+        .task-actions {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .task-item:hover .task-actions {
+            opacity: 1;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            height: 1.25rem;
+            width: 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkmark:after {
+            content: "";
+            display: none;
+            width: 0.25rem;
+            height: 0.5rem;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-top: -1px;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            z-index: 10;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            position: sticky;
+            bottom: 0;
+            background-color: var(--white);
+            z-index: 10;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .upgrade-note {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .content-container {
+                flex-direction: column;
+            }
+            
+            .tasks-sidebar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar-right {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/luckyask/test/main/TSS%20logo%20white.jpg" alt="The Sierra Suites Logo">
+                    <span>The Sierra Suites</span>
+                </div>
+                <button class="sidebar-toggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="assets/user-avatar.jpg" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h4>John Contractor</h4>
+                    <p>Johnson Builders</p>
+                </div>
+                <button class="profile-menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="taskflow.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>TaskFlow</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="fieldsnap.html">
+                            <i class="fas fa-camera"></i>
+                            <span>FieldSnap</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="quotehub.html">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>QuoteHub</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reportcenter.html">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>ReportCenter</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-users"></i>
+                            <span>CRM</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Proposals</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tools"></i>
+                            <span>Subcontractors</span>
+                            <span class="upgrade-badge">Enterprise</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="upgrade-card">
+                    <h4>Upgrade to Pro</h4>
+                    <p>Unlock team task assignment and calendar sync</p>
+                    <a href="pricing.html" class="btn btn-primary btn-small">Upgrade Now</a>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>TaskFlow</h2>
+                    <div class="view-selector">
+                        <button class="btn btn-outline active">Calendar</button>
+                        <button class="btn btn-outline">List</button>
+                        <button class="btn btn-outline">Board</button>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="date-navigation">
+                        <button class="btn btn-icon">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3>June 2023</h3>
+                        <button class="btn btn-icon">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button class="btn btn-outline">
+                            Today
+                        </button>
+                    </div>
+                    <div class="topbar-actions">
+                        <button class="btn btn-primary" id="new-task-btn">
+                            <i class="fas fa-plus"></i>
+                            New Task
+                        </button>
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">2</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-container">
+                <div class="calendar-container">
+                    <div id="calendar"></div>
+                </div>
+                
+                <div class="tasks-sidebar">
+                    <div class="tasks-header">
+                        <h3>Tasks for <span id="selected-date">Today</span></h3>
+                        <button class="btn btn-icon">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="tasks-list">
+                        <div class="task-item priority-high">
+                            <label class="checkbox-container">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-content">
+                                <h4>Submit building permit application</h4>
+                                <p>Oakwood Office Build</p>
+                                <div class="task-meta">
+                                    <span><i class="fas fa-clock"></i> Due today</span>
+                                    <span><i class="fas fa-user"></i> John C.</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="task-item priority-medium">
+                            <label class="checkbox-container">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-content">
+                                <h4>Order kitchen cabinets</h4>
+                                <p>Maple Street Renovation</p>
+                                <div class="task-meta">
+                                    <span><i class="fas fa-clock"></i> Due tomorrow</span>
+                                    <span><i class="fas fa-user"></i> John C.</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="task-item">
+                            <label class="checkbox-container">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-content">
+                                <h4>Schedule electrical inspection</h4>
+                                <p>Maple Street Renovation</p>
+                                <div class="task-meta">
+                                    <span><i class="fas fa-clock"></i> Due in 3 days</span>
+                                    <span><i class="fas fa-user"></i> John C.</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="task-item">
+                            <label class="checkbox-container">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-content">
+                                <h4>Meet with Pine Ridge clients</h4>
+                                <p>Pine Ridge Addition</p>
+                                <div class="task-meta">
+                                    <span><i class="fas fa-clock"></i> Due in 4 days</span>
+                                    <span><i class="fas fa-user"></i> John C.</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="task-item completed">
+                            <label class="checkbox-container">
+                                <input type="checkbox" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-content">
+                                <h4>Confirm delivery of drywall</h4>
+                                <p>Oakwood Office Build</p>
+                                <div class="task-meta">
+                                    <span><i class="fas fa-check-circle"></i> Completed yesterday</span>
+                                    <span><i class="fas fa-user"></i> John C.</span>
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tasks-footer">
+                        <button class="btn btn-outline btn-block" id="add-task-btn">
+                            <i class="fas fa-plus"></i>
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Task Modal -->
+    <div class="modal" id="task-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Task</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="task-title">Task Title</label>
+                    <input type="text" id="task-title" placeholder="What needs to be done?">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-project">Project</label>
+                        <select id="task-project">
+                            <option>Select Project</option>
+                            <option>Maple Street Renovation</option>
+                            <option>Oakwood Office Build</option>
+                            <option>Pine Ridge Addition</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option>Normal</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-start">Start Date</label>
+                        <input type="date" id="task-start" value="2023-06-12">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due">Due Date</label>
+                        <input type="date" id="task-due" value="2023-06-15">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-assignee">Assignee</label>
+                    <select id="task-assignee" disabled>
+                        <option>John Contractor</option>
+                        <option>Upgrade to assign to team</option>
+                    </select>
+                    <p class="upgrade-note">Upgrade to Pro to assign tasks to team members</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-description">Description (optional)</label>
+                    <textarea id="task-description" placeholder="Add details about this task"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-task">Cancel</button>
+                <button class="btn btn-primary" id="save-task">Create Task</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize calendar
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'Submit Building Permit',
+                        start: new Date(),
+                        color: '#EF4444'
+                    },
+                    {
+                        title: 'Client Meeting',
+                        start: '2023-06-15T10:00:00',
+                        end: '2023-06-15T11:30:00',
+                        color: '#3B82F6'
+                    },
+                    {
+                        title: 'Electrical Inspection',
+                        start: '2023-06-18T13:00:00',
+                        color: '#10B981'
+                    }
+                ],
+                dateClick: function(info) {
+                    const selectedDateEl = document.getElementById('selected-date');
+                    if (selectedDateEl) {
+                        selectedDateEl.textContent = info.dateStr;
+                    }
+                }
+            });
+            
+            calendar.render();
+            
+            // Modal functionality
+            const taskModal = document.getElementById('task-modal');
+            const newTaskBtn = document.getElementById('new-task-btn');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const closeButtons = document.querySelectorAll('.modal-close');
+            const cancelTaskBtn = document.getElementById('cancel-task');
+            
+            function openTaskModal() {
+                taskModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeTaskModal() {
+                taskModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            newTaskBtn.addEventListener('click', openTaskModal);
+            addTaskBtn.addEventListener('click', openTaskModal);
+            
+            closeButtons.forEach(button => {
+                button.addEventListener('click', closeTaskModal);
+            });
+            
+            if (cancelTaskBtn) {
+                cancelTaskBtn.addEventListener('click', closeTaskModal);
+            }
+            
+            // Click outside modal to close
+            window.addEventListener('click', function(event) {
+                if (event.target === taskModal) {
+                    closeTaskModal();
+                }
+            });
+            
+            // Task completion toggle
+            const checkboxes = document.querySelectorAll('.task-checkbox input');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskItem = this.closest('.task-item');
+                    if (this.checked) {
+                        taskItem.classList.add('completed');
+                    } else {
+                        taskItem.classList.remove('completed');
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+            
+            // Sidebar toggle button
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                    
+                    // Change icon based on state
+                    const icon = this.querySelector('i');
+                    if (sidebar.classList.contains('collapsed')) {
+                        icon.classList.remove('fa-chevron-left');
+                        icon.classList.add('fa-chevron-right');
+                    } else {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-left');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

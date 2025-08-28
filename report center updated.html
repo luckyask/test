@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReportCenter | The Sierra Suites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.25/dist/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary-color: #f97316;
+            --secondary-dark: #ea580c;
+            --secondary-light: #fb923c;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --text-lighter: #9ca3af;
+            --bg-color: #f9fafb;
+            --bg-dark: #f3f4f6;
+            --white: #ffffff;
+            --black: #000000;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 0.125rem;
+            --radius: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-light);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--white);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .logo img {
+            height: 2rem;
+            width: auto;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        .profile-menu {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-nav ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+        }
+
+        .sidebar-nav a.active {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+
+        .sidebar-nav i {
+            width: 1.5rem;
+            margin-right: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .upgrade-badge {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-full);
+            margin-left: auto;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 1rem 0;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .upgrade-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .upgrade-card h4 {
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .upgrade-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .topbar h2 {
+            margin-bottom: 0;
+            font-size: 1.5rem;
+        }
+
+        .report-selector select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background-color: var(--white);
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .date-range select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background-color: var(--white);
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-link {
+            background-color: transparent;
+            color: var(--primary-color);
+            padding: 0;
+            font-weight: 500;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            padding: 0;
+            border-radius: 50%;
+            background-color: transparent;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .notification-btn:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -0.25rem;
+            right: -0.25rem;
+            background-color: var(--danger-color);
+            color: var(--white);
+            font-size: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Content Container */
+        .content-container {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .summary-card h4 {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-change {
+            font-size: 0.875rem;
+            margin-bottom: 0;
+        }
+
+        .summary-change.up {
+            color: var(--success-color);
+        }
+
+        .summary-change.down {
+            color: var(--danger-color);
+        }
+
+        .report-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chart-header h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0;
+        }
+
+        .chart-container {
+            padding: 1.5rem;
+            height: 300px;
+        }
+
+        .report-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .time-entries {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .time-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--bg-color);
+            border-radius: var(--radius);
+        }
+
+        .entry-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .entry-info p {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        .entry-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 0.875rem;
+        }
+
+        .entry-hours {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .milestones {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--bg-color);
+            border-radius: var(--radius);
+            gap: 1rem;
+        }
+
+        .milestone-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .milestone-item.completed .milestone-icon {
+            background-color: var(--success-color);
+            color: var(--white);
+        }
+
+        .milestone-item.upcoming .milestone-icon {
+            background-color: var(--warning-color);
+            color: var(--white);
+        }
+
+        .milestone-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .milestone-content p {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        /* Tier-specific features */
+        .tier-feature {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .tier-label {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-starter {
+            background-color: #e0f2fe;
+            color: var(--primary-dark);
+        }
+
+        .tier-pro {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .tier-enterprise {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            margin-bottom: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .export-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .export-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .export-option:hover {
+            border-color: var(--primary-color);
+            background-color: var(--bg-color);
+        }
+
+        .export-option i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .export-option span {
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .report-charts,
+            .report-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                height: 100%;
+                left: -100%;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .topbar-left h2 {
+                display: none;
+            }
+            
+            .report-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .topbar {
+                flex-wrap: wrap;
+                padding: 1rem;
+            }
+            
+            .topbar-left,
+            .topbar-right {
+                width: 100%;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .report-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-container {
+                padding: 1rem;
+            }
+            
+            .time-entry,
+            .milestone-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .entry-details {
+                align-items: flex-start;
+            }
+        }
+
+        /* Accessibility improvements */
+        .btn:focus,
+        select:focus,
+        a:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .export-option:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .summary-card,
+            .chart-card,
+            .card {
+                border: 1px solid var(--text-color);
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/luckyask/test/main/TSS%20logo%20white.jpg" alt="The Sierra Suites Logo">
+                    <span>The Sierra Suites</span>
+                </div>
+                <button class="sidebar-toggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h4>John Contractor</h4>
+                    <p>Johnson Builders</p>
+                    <small id="user-tier" class="tier-label tier-pro">Pro Plan</small>
+                </div>
+                <button class="profile-menu" aria-label="Profile menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav" aria-label="Main navigation">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="taskflow.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>TaskFlow</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="fieldsnap.html">
+                            <i class="fas fa-camera"></i>
+                            <span>FieldSnap</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="quotehub.html">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>QuoteHub</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="reportcenter.html">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>ReportCenter</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-users"></i>
+                            <span>CRM</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Proposals</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tools"></i>
+                            <span>Subcontractors</span>
+                            <span class="upgrade-badge">Enterprise</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="upgrade-card">
+                    <h4>Upgrade to Enterprise</h4>
+                    <p>Unlock advanced reporting and business intelligence</p>
+                    <a href="pricing.html" class="btn btn-primary btn-small">Upgrade Now</a>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>ReportCenter</h2>
+                    <div class="report-selector">
+                        <select id="report-type" aria-label="Select report type">
+                            <option>Time Tracking</option>
+                            <option>Project Progress</option>
+                            <option>Financial Overview</option>
+                            <option>Task Completion</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="date-range">
+                        <select id="report-range" aria-label="Select date range">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>This month</option>
+                            <option>Last month</option>
+                            <option>Custom range...</option>
+                        </select>
+                    </div>
+                    <div class="topbar-actions">
+                        <button class="btn btn-primary" id="export-report-btn">
+                            <i class="fas fa-file-export"></i>
+                            Export
+                        </button>
+                        <button class="notification-btn" aria-label="Notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">1</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-container">
+                <div class="report-summary">
+                    <div class="summary-card">
+                        <h4>Total Hours Tracked</h4>
+                        <p class="summary-value">84.5</p>
+                        <p class="summary-change up">+12% from last period</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Active Projects</h4>
+                        <p class="summary-value">3</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Tasks Completed</h4>
+                        <p class="summary-value">24</p>
+                        <p class="summary-change up">+8% from last period</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Estimated Revenue</h4>
+                        <p class="summary-value">$24,500</p>
+                    </div>
+                </div>
+                
+                <!-- Tier-specific features -->
+                <div class="tier-feature" id="starter-feature">
+                    <span class="tier-label tier-starter">Starter Feature</span>
+                    <h3>Labor Productivity Report</h3>
+                    <p>Compare estimated vs. actual labor hours across your projects.</p>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Labor Productivity</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="laborChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tier-feature" id="pro-feature">
+                    <span class="tier-label tier-pro">Pro Feature</span>
+                    <h3>Material Cost Tracking</h3>
+                    <p>Monitor budget vs. actual material expenses for better cost control.</p>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Material Costs</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="materialChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tier-feature" id="enterprise-feature">
+                    <span class="tier-label tier-enterprise">Enterprise Feature</span>
+                    <h3>Subcontractor Performance</h3>
+                    <p>Evaluate timeliness and quality of subcontractors with detailed analytics.</p>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Subcontractor Ratings</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="subcontractorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-charts">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Time Tracking</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="timeChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Project Progress</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Task Completion</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="taskChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Financial Overview</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-icon">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="financialChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="report-details">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Time Entries</h3>
+                            <a href="#" class="btn btn-link">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="time-entries">
+                                <div class="time-entry">
+                                    <div class="entry-info">
+                                        <h4>Maple Street Renovation</h4>
+                                        <p>Kitchen cabinet installation</p>
+                                    </div>
+                                    <div class="entry-details">
+                                        <span>Jun 10, 2023</span>
+                                        <span class="entry-hours">6.5 hours</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="time-entry">
+                                    <div class="entry-info">
+                                        <h4>Oakwood Office Build</h4>
+                                        <p>Framing inspection</p>
+                                    </div>
+                                    <div class="entry-details">
+                                        <span>Jun 8, 2023</span>
+                                        <span class="entry-hours">4 hours</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="time-entry">
+                                    <div class="entry-info">
+                                        <h4>Pine Ridge Addition</h4>
+                                        <p>Foundation work</p>
+                                    </div>
+                                    <div class="entry-details">
+                                        <span>Jun 5, 2023</span>
+                                        <span class="entry-hours">8 hours</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="time-entry">
+                                    <div class="entry-info">
+                                        <h4>Maple Street Renovation</h4>
+                                        <p>Plumbing rough-in</p>
+                                    </div>
+                                    <div class="entry-details">
+                                        <span>Jun 3, 2023</span>
+                                        <span class="entry-hours">5.5 hours</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Project Milestones</h3>
+                            <a href="#" class="btn btn-link">View All</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="milestones">
+                                <div class="milestone-item completed">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <h4>Framing Complete</h4>
+                                        <p>Oakwood Office Build • Completed Jun 8</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="milestone-item completed">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <h4>Plumbing Rough-In</h4>
+                                        <p>Maple Street Renovation • Completed Jun 3</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="milestone-item upcoming">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-flag"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <h4>Electrical Inspection</h4>
+                                        <p>Maple Street Renovation • Due Jun 15</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="milestone-item upcoming">
+                                    <div class="milestone-icon">
+                                        <i class="fas fa-flag"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <h4>Drywall Installation</h4>
+                                        <p>Oakwood Office Build • Due Jun 22</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="export-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Report</h3>
+                <button class="modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="export-options">
+                <div class="export-option" data-format="excel">
+                    <i class="fas fa-file-excel"></i>
+                    <span>Export to Excel</span>
+                </div>
+                <div class="export-option" data-format="pdf">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Export to PDF</span>
+                </div>
+                <div class="export-option" data-format="csv">
+                    <i class="fas fa-file-csv"></i>
+                    <span>Export to CSV</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://qjswuwcqyzeuqqqltykz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqc3d1d2NxeXpldXFxcWx0eWt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyMjk0MDUsImV4cCI6MjA3MDgwNTQwNX0.qgH8DMJEoJVuYOXSyr0RAj01Yt7bBR8EYL6qw3YXyAs';
+
+        // Initialize Supabase client
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // DOM Elements
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+        const exportReportBtn = document.getElementById('export-report-btn');
+        const exportModal = document.getElementById('export-modal');
+        const modalClose = document.querySelector('.modal-close');
+        const exportOptions = document.querySelectorAll('.export-option');
+        const userTierElement = document.getElementById('user-tier');
+
+        // Mobile menu toggle
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Sidebar toggle for desktop
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            const icon = sidebarToggle.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-chevron-left');
+                icon.classList.add('fa-chevron-right');
+            } else {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-left');
+            }
+        });
+
+        // Export modal
+        exportReportBtn.addEventListener('click', () => {
+            exportModal.classList.add('active');
+        });
+
+        modalClose.addEventListener('click', () => {
+            exportModal.classList.remove('active');
+        });
+
+        exportOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const format = option.getAttribute('data-format');
+                exportData(format);
+                exportModal.classList.remove('active');
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === exportModal) {
+                exportModal.classList.remove('active');
+            }
+        });
+
+        // Initialize charts
+        function initCharts() {
+            // Time Tracking Chart
+            const timeCtx = document.getElementById('timeChart').getContext('2d');
+            new Chart(timeCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    datasets: [{
+                        label: 'Hours Tracked',
+                        data: [6.5, 8, 7.5, 9, 8.5, 4],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hours'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Project Progress Chart
+            const progressCtx = document.getElementById('progressChart').getContext('2d');
+            new Chart(progressCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'In Progress', 'Not Started'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#10b981', '#3b82f6', '#e5e7eb'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Task Completion Chart
+            const taskCtx = document.getElementById('taskChart').getContext('2d');
+            new Chart(taskCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Tasks Completed',
+                        data: [12, 19, 15, 24],
+                        fill: false,
+                        backgroundColor: '#8b5cf6',
+                        borderColor: '#8b5cf6',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Financial Overview Chart
+            const financialCtx = document.getElementById('financialChart').getContext('2d');
+            new Chart(financialCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Materials', 'Labor', 'Subcontractors', 'Equipment', 'Other'],
+                    datasets: [{
+                        label: 'Budget',
+                        data: [12000, 15000, 8000, 4000, 3000],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1
+                    }, {
+                        label: 'Actual',
+                        data: [12500, 14500, 8500, 4200, 3200],
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'USD'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Labor Productivity Chart (Starter feature)
+            const laborCtx = document.getElementById('laborChart').getContext('2d');
+            new Chart(laborCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Project A', 'Project B', 'Project C'],
+                    datasets: [{
+                        label: 'Estimated Hours',
+                        data: [120, 180, 150],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1
+                    }, {
+                        label: 'Actual Hours',
+                        data: [115, 195, 145],
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hours'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Material Cost Chart (Pro feature)
+            const materialCtx = document.getElementById('materialChart').getContext('2d');
+            new Chart(materialCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Lumber', 'Concrete', 'Electrical', 'Plumbing', 'Finishing'],
+                    datasets: [{
+                        label: 'Budget',
+                        data: [5000, 3500, 2800, 3200, 4500],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1
+                    }, {
+                        label: 'Actual',
+                        data: [5200, 3700, 3000, 3100, 4800],
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'USD'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Subcontractor Performance Chart (Enterprise feature)
+            const subcontractorCtx = document.getElementById('subcontractorChart').getContext('2d');
+            new Chart(subcontractorCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Timeliness', 'Quality', 'Communication', 'Cost Efficiency', 'Safety'],
+                    datasets: [{
+                        label: 'ABC Electrical',
+                        data: [85, 90, 75, 80, 95],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3b82f6',
+                        pointBackgroundColor: '#3b82f6'
+                    }, {
+                        label: 'XYZ Plumbing',
+                        data: [75, 85, 90, 70, 80],
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: '#10b981',
+                        pointBackgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Export data function
+        function exportData(format) {
+            // In a real implementation, this would fetch data from Supabase
+            // For demo purposes, we're using static data
+            const data = [
+                { project: 'Maple Street Renovation', task: 'Kitchen cabinet installation', date: '2023-06-10', hours: 6.5 },
+                { project: 'Oakwood Office Build', task: 'Framing inspection', date: '2023-06-08', hours: 4 },
+                { project: 'Pine Ridge Addition', task: 'Foundation work', date: '2023-06-05', hours: 8 },
+                { project: 'Maple Street Renovation', task: 'Plumbing rough-in', date: '2023-06-03', hours: 5.5 }
+            ];
+
+            switch (format) {
+                case 'csv':
+                    exportToCSV(data, 'time_entries');
+                    break;
+                case 'excel':
+                    exportToExcel(data, 'time_entries');
+                    break;
+                case 'pdf':
+                    exportToPDF(data, 'Time Entries Report');
+                    break;
+            }
+        }
+
+        function exportToCSV(data, filename) {
+            const csv = Papa.unparse(data);
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${filename}_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportToExcel(data, filename) {
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
+            XLSX.writeFile(workbook, `${filename}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        }
+
+        function exportToPDF(data, title) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(16);
+            doc.text(title, 14, 15);
+            
+            // Add table
+            doc.autoTable({
+                startY: 20,
+                head: [Object.keys(data[0])],
+                body: data.map(row => Object.values(row))
+            });
+            
+            // Save the PDF
+            doc.save(`${title.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
+
+        // Check user subscription tier and adjust features accordingly
+        async function checkUserTier() {
+            try {
+                // In a real implementation, this would fetch the user's tier from Supabase
+                // For demo purposes, we're setting it manually
+                const userTier = 'pro'; // Can be 'starter', 'pro', or 'enterprise'
+                
+                // Update UI based on tier
+                userTierElement.textContent = `${userTier.charAt(0).toUpperCase() + userTier.slice(1)} Plan`;
+                userTierElement.className = `tier-label tier-${userTier}`;
+                
+                // Show/hide features based on tier
+                document.getElementById('starter-feature').style.display = 'block';
+                document.getElementById('pro-feature').style.display = userTier === 'pro' || userTier === 'enterprise' ? 'block' : 'none';
+                document.getElementById('enterprise-feature').style.display = userTier === 'enterprise' ? 'block' : 'none';
+                
+            } catch (error) {
+                console.error('Error checking user tier:', error);
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            checkUserTier();
+        });
+    </script>
+</body>
+</html>

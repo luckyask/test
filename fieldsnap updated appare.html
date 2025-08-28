@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FieldSnap | The Sierra Suites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary-color: #f97316;
+            --secondary-dark: #ea580c;
+            --secondary-light: #fb923c;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --text-lighter: #9ca3af;
+            --bg-color: #f9fafb;
+            --bg-dark: #f3f4f6;
+            --white: #ffffff;
+            --black: #000000;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 0.125rem;
+            --radius: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .logo img {
+            height: 2.5rem;
+            width: auto;
+            object-fit: contain;
+            border-radius: var(--radius);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--primary-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .sidebar-logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius);
+        }
+        
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .user-profile {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .user-info h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .user-info p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .profile-menu {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 20px 0;
+            flex-grow: 1;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 4px;
+        }
+        
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar-nav a.active {
+            background: rgba(249, 115, 22, 0.2);
+            color: white;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .sidebar-nav i {
+            width: 24px;
+            margin-right: 12px;
+        }
+        
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 15px 0;
+        }
+        
+        .upgrade-badge {
+            background: var(--secondary-color);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .upgrade-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        
+        .upgrade-card h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .upgrade-card p {
+            font-size: 12px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-color);
+        }
+        
+        .topbar {
+            background: var(--white);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-light);
+            display: none;
+        }
+        
+        .topbar h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .project-selector select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .search-bar {
+            position: relative;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .search-bar input {
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            width: 240px;
+            font-size: 14px;
+            background-color: var(--bg-color);
+        }
+        
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white) !important;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            border-radius: 50%;
+            background-color: transparent;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-icon:hover {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-color);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Content Container */
+        .content-container {
+            padding: 24px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .view-options, .sort-options, .filter-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sort-options select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: var(--white);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        /* Photos Grid */
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .photo-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .photo-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .photo-card:hover .photo-container img {
+            transform: scale(1.05);
+        }
+        
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .photo-card:hover .photo-overlay {
+            opacity: 1;
+        }
+        
+        .photo-details {
+            padding: 16px;
+        }
+        
+        .photo-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-color);
+        }
+        
+        .photo-details p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+        
+        .photo-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        
+        .page-numbers {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .page-numbers span {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            font-size: 14px;
+            cursor: pointer;
+            background-color: var(--white);
+            color: var(--text-color);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .page-numbers span.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+            position: relative;
+            background-color: var(--bg-color);
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--secondary-color);
+            background: rgba(249, 115, 22, 0.05);
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+        
+        .upload-area h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        
+        .upload-area p {
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: inherit;
+            background-color: var(--white);
+            color: var(--text-color);
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Upload Preview */
+        .upload-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .preview-item {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 100px;
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(220, 53, 69, 0.8);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--border-color);
+        }
+        
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        
+        /* Upgrade prompt */
+        .upgrade-prompt {
+            background-color: #fff8e6;
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: var(--radius);
+            display: none;
+        }
+        
+        .starter-tier .upgrade-prompt {
+            display: block;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header span,
+            .user-info,
+            .sidebar-nav span,
+            .upgrade-card {
+                display: none;
+            }
+            
+            .sidebar-logo {
+                justify-content: center;
+            }
+            
+            .user-profile {
+                justify-content: center;
+            }
+            
+            .sidebar-nav a {
+                justify-content: center;
+                padding: 16px;
+            }
+            
+            .sidebar-nav i {
+                margin-right: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .search-bar input {
+                width: 180px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .topbar-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+            
+            .header {
+                height: 70px;
+            }
+            
+            .dashboard-container {
+                padding-top: 70px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .content-container {
+                padding: 16px;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .photos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+            
+            .upload-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/luckyask/test/main/TSS%20logo%20white.jpg" alt="The Sierra Suites Logo">
+                <span>The Sierra Suites</span>
+            </div>
+            <button class="mobile-menu-toggle" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="https://raw.githubusercontent.com/luckyask/test/main/TSS%20logo%20white.jpg" alt="The Sierra Suites Logo">
+                    <span>The Sierra Suites</span>
+                </div>
+                <button class="sidebar-toggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h4>John Contractor</h4>
+                    <p>Johnson Builders</p>
+                </div>
+                <button class="profile-menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="taskflow.html">
+                            <i class="fas fa-tasks"></i>
+                            <span>TaskFlow</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="fieldsnap.html">
+                            <i class="fas fa-camera"></i>
+                            <span>FieldSnap</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="quotehub.html">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>QuoteHub</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reportcenter.html">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>ReportCenter</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-users"></i>
+                            <span>CRM</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Proposals</span>
+                            <span class="upgrade-badge">Pro</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-tools"></i>
+                            <span>Subcontractors</span>
+                            <span class="upgrade-badge">Enterprise</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="upgrade-card">
+                    <h4>Upgrade to Pro</h4>
+                    <p>Unlock advanced photo organization and search</p>
+                    <a href="pricing.html" class="btn btn-primary btn-small">Upgrade Now</a>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>FieldSnap</h2>
+                    <div class="project-selector">
+                        <select id="project-filter">
+                            <option value="all">All Projects</option>
+                            <!-- Projects will be dynamically populated -->
+                        </select>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search photos..." id="photo-search">
+                    </div>
+                    <div class="topbar-actions">
+                        <button class="btn btn-primary" id="upload-photos-btn">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            Upload Photos
+                        </button>
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-container">
+                <!-- Upgrade prompt for Starter tier -->
+                <div class="upgrade-prompt">
+                    <strong>Upgrade to Pro</strong> for advanced features like voice-to-text descriptions, GPS location capture, and professional photo tagging.
+                </div>
+                
+                <div class="toolbar">
+                    <div class="view-options">
+                        <button class="btn btn-icon active" id="grid-view-btn">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="btn btn-icon" id="list-view-btn">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                    <div class="sort-options">
+                        <select id="sort-select">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                            <option value="project">By project</option>
+                        </select>
+                    </div>
+                    <div class="filter-options">
+                        <button class="btn btn-outline" id="filter-btn">
+                            <i class="fas fa-filter"></i>
+                            Filters
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="photos-grid" id="photos-container">
+                    <div class="spinner" id="loading-spinner"></div>
+                    <!-- Photos will be dynamically loaded here -->
+                </div>
+                
+                <div class="pagination" id="pagination">
+                    <button class="btn btn-outline" id="prev-page-btn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div class="page-numbers" id="page-numbers">
+                        <span class="active">1</span>
+                    </div>
+                    <button class="btn btn-outline" id="next-page-btn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Photo Upload Modal -->
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload Photos</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="drop-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>Drag & Drop Photos Here</h4>
+                    <p>or</p>
+                    <button class="btn btn-outline" id="browse-btn">Select Files</button>
+                    <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="upload-options">
+                    <div class="form-group">
+                        <label for="upload-project">Project</label>
+                        <select id="upload-project">
+                            <option value="">Select Project</option>
+                            <!-- Projects will be dynamically populated -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photo-description">Description (optional)</label>
+                        <textarea id="photo-description" placeholder="Add a description for these photos"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="capture-location" checked>
+                            <span class="checkmark"></span>
+                            Capture location data
+                        </label>
+                    </div>
+
+                    <!-- Voice-to-text button (Pro/Enterprise only) -->
+                    <div class="form-group" id="voice-input-container" style="display: none;">
+                        <button class="btn btn-outline" id="voice-btn">
+                            <i class="fas fa-microphone"></i>
+                            Voice Description
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="upload-preview" id="upload-preview">
+                    <!-- Files will be previewed here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-upload">Cancel</button>
+                <button class="btn btn-primary" id="start-upload-btn" disabled>Upload Photos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Cloudinary widget SDK -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+    <!-- Load Supabase client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+        // Initialize Supabase client with your credentials
+        const supabaseUrl = 'https://qjswuwcqyzeuqqqltykz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqc3d1d2NxeXpldXFxcWx0eWt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyMjk0MDUsImV4cCI6MjA3MDgwNTQwNX0.qgH8DMJEoJVuYOXSyr0RAj01Yt7bBR8EYL6qw3YXyAs';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Security and API functions using PostgreSQL functions
+        const PhotoAPI = {
+            // Get current user's ID
+            getCurrentUser: async function() {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (error) throw new Error('Authentication error: ' + error.message);
+                if (!user) throw new Error('No authenticated user');
+                
+                return {
+                    id: user.id,
+                    company_id: user.user_metadata?.company_id
+                };
+            },
+            
+            // Use PostgreSQL function to get user's photos
+            getPhotos: async function(projectId = null, searchQuery = '') {
+                try {
+                    const user = await this.getCurrentUser();
+                    
+                    // Call the PostgreSQL function you created
+                    const { data: photos, error } = await supabase
+                        .rpc('get_user_photos', { 
+                            p_user_id: user.id 
+                        });
+                    
+                    if (error) throw error;
+                    
+                    // Apply additional filtering if needed
+                    let filteredPhotos = photos;
+                    if (projectId && projectId !== 'all') {
+                        filteredPhotos = filteredPhotos.filter(photo => 
+                            photo.project_id === projectId);
+                    }
+                    
+                    if (searchQuery) {
+                        const query = searchQuery.toLowerCase();
+                        filteredPhotos = filteredPhotos.filter(photo => 
+                            photo.description && photo.description.toLowerCase().includes(query));
+                    }
+                    
+                    return filteredPhotos;
+                    
+                } catch (error) {
+                    console.error('Error fetching photos:', error);
+                    throw new Error('Failed to load photos: ' + error.message);
+                }
+            },
+            
+            // Use PostgreSQL function to add a new photo
+            addPhoto: async function(photoData) {
+                try {
+                    const user = await this.getCurrentUser();
+                    
+                    // Call the PostgreSQL function you created
+                    const { data, error } = await supabase
+                        .rpc('add_photo', {
+                            p_url: photoData.url,
+                            p_description: photoData.description,
+                            p_project_id: photoData.project_id,
+                            p_user_id: user.id
+                        });
+                    
+                    if (error) throw error;
+                    return data;
+                    
+                } catch (error) {
+                    console.error('Error adding photo:', error);
+                    throw new Error('Failed to add photo: ' + error.message);
+                }
+            },
+            
+            // Delete a photo with security validation
+            deletePhoto: async function(photoId) {
+                try {
+                    const user = await this.getCurrentUser();
+                    
+                    // First verify the photo belongs to user's company
+                    const { data: photo, error: fetchError } = await supabase
+                        .from('project_photos')
+                        .select('company_id')
+                        .eq('id', photoId)
+                        .single();
+                        
+                    if (fetchError) throw fetchError;
+                    
+                    if (user.company_id !== photo.company_id) {
+                        throw new Error('Access denied: Cannot delete this photo');
+                    }
+                    
+                    // Delete the photo
+                    const { error } = await supabase
+                        .from('project_photos')
+                        .delete()
+                        .eq('id', photoId);
+                    
+                    if (error) throw error;
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Error deleting photo:', error);
+                    throw new Error('Failed to delete photo: ' + error.message);
+                }
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Cloudinary upload widget
+            const cloudinaryWidget = cloudinary.createUploadWidget({
+                cloudName: 'dlenvfyx5',
+                uploadPreset: 'sierra_suites_upload',
+                sources: ['local', 'camera'],
+                multiple: true,
+                clientAllowedFormats: ['image'],
+                maxImageFileSize: 5000000, // 5MB
+                showAdvancedOptions: true,
+                styles: {
+                    palette: {
+                        window: "#1E3A8A",
+                        windowBorder: "#90A0B3",
+                        tabIcon: "#F97316",
+                        menuIcons: "#5A616A",
+                        textDark: "#000000",
+                        textLight: "#FFFFFF",
+                        link: "#F97316",
+                        action: "#FF620C",
+                        inactiveTabIcon: "#0E2F5A",
+                        error: "#F44235",
+                        inProgress: "#0078FF",
+                        complete: "#20B832",
+                        sourceBg: "#E4EBF1"
+                    },
+                    fonts: {
+                        default: null,
+                        "'Montserrat', sans-serif": {
+                            url: "https://fonts.googleapis.com/css?family=Montserrat",
+                            active: true
+                        }
+                    }
+                }
+            }, (error, result) => {
+                if (error) {
+                    console.error("Upload Error:", error);
+                    alert("Sorry, the upload failed. Please check your connection and try again. Error: " + error.statusText);
+                    return;
+                }
+                
+                if (result && result.event === "success") {
+                    console.log("Upload successful: ", result.info);
+                    // Save the photo info to your database
+                    savePhotoToDatabase(result.info);
+                } else if (result && result.event === "close") {
+                    console.log("Upload widget was closed");
+                }
+            });
+
+            // Modal functionality
+            const uploadModal = document.getElementById('upload-modal');
+            const uploadBtn = document.getElementById('upload-photos-btn');
+            const closeModalBtn = document.querySelector('.modal-close');
+            const cancelUploadBtn = document.getElementById('cancel-upload');
+            const browseBtn = document.getElementById('browse-btn');
+            const fileInput = document.getElementById('file-input');
+            const dropArea = document.getElementById('drop-area');
+            const startUploadBtn = document.getElementById('start-upload-btn');
+            const voiceBtn = document.getElementById('voice-btn');
+            const voiceInputContainer = document.getElementById('voice-input-container');
+            const descriptionTextarea = document.getElementById('photo-description');
+
+            // Show voice input for Pro/Enterprise tiers (simulated here)
+            const userTier = 'starter'; // Change to 'pro' or 'enterprise' to test
+            if (userTier !== 'starter') {
+                voiceInputContainer.style.display = 'block';
+            }
+
+            // Open modal when upload button is clicked
+            uploadBtn.addEventListener('click', () => {
+                uploadModal.classList.add('active');
+                loadProjectsForDropdown();
+            });
+
+            // Close modal when close button is clicked
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelUploadBtn.addEventListener('click', closeModal);
+
+            // Close modal when clicking outside of it
+            uploadModal.addEventListener('click', (e) => {
+                if (e.target === uploadModal) {
+                    closeModal();
+                }
+            });
+
+            // Open file browser when browse button is clicked
+            browseBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Handle file selection
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropArea.classList.add('dragover');
+            }
+
+            function unhighlight() {
+                dropArea.classList.remove('dragover');
+            }
+
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            // Voice-to-text functionality
+            if (voiceBtn) {
+                voiceBtn.addEventListener('click', startVoiceInput);
+            }
+
+            function closeModal() {
+                uploadModal.classList.remove('active');
+                // Clear any selected files
+                fileInput.value = '';
+                clearPreview();
+            }
+
+            function handleFileSelect(e) {
+                const files = e.target.files;
+                handleFiles(files);
+            }
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    startUploadBtn.disabled = false;
+                    previewFiles(files);
+                }
+            }
+
+            function previewFiles(files) {
+                const previewContainer = document.getElementById('upload-preview');
+                previewContainer.innerHTML = '';
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (!file.type.match('image.*')) continue;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'preview-item';
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-btn';
+                        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                        removeBtn.addEventListener('click', () => {
+                            previewItem.remove();
+                            if (document.querySelectorAll('.preview-item').length === 0) {
+                                startUploadBtn.disabled = true;
+                            }
+                        });
+                        
+                        previewItem.appendChild(img);
+                        previewItem.appendChild(removeBtn);
+                        previewContainer.appendChild(previewItem);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function clearPreview() {
+                const previewContainer = document.getElementById('upload-preview');
+                previewContainer.innerHTML = '';
+                startUploadBtn.disabled = true;
+            }
+
+            function startVoiceInput() {
+                if (!('webkitSpeechRecognition' in window)) {
+                    alert("Your browser doesn't support voice input. Please use Chrome or Edge.");
+                    return;
+                }
+
+                const recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Listening...';
+                voiceBtn.classList.add('recording');
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    descriptionTextarea.value = transcript;
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Description';
+                    voiceBtn.classList.remove('recording');
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error', event.error);
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Description';
+                    voiceBtn.classList.remove('recording');
+                };
+
+                recognition.onend = function() {
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice Description';
+                    voiceBtn.classList.remove('recording');
+                };
+
+                recognition.start();
+            }
+
+            // Start upload process
+            startUploadBtn.addEventListener('click', () => {
+                // Use the Cloudinary widget for uploads
+                cloudinaryWidget.open();
+            });
+
+            // Real function to save photo data to Supabase using PostgreSQL function
+            async function savePhotoToDatabase(photoInfo) {
+                try {
+                    const projectId = document.getElementById('upload-project').value;
+                    const description = document.getElementById('photo-description').value;
+                    
+                    // Use our secure API function
+                    await PhotoAPI.addPhoto({
+                        url: photoInfo.secure_url,
+                        public_id: photoInfo.public_id,
+                        description: description,
+                        project_id: projectId || null,
+                        format: photoInfo.format,
+                        bytes: photoInfo.bytes,
+                        width: photoInfo.width,
+                        height: photoInfo.height
+                    });
+                    
+                    alert('Photo uploaded and saved successfully!');
+                    closeModal();
+                    loadPhotos();
+                    
+                } catch (error) {
+                    console.error('Error in savePhotoToDatabase:', error);
+                    alert('Error: ' + error.message);
+                }
+            }
+
+            // Real function to load photos from Supabase using PostgreSQL function
+            async function loadPhotos() {
+                try {
+                    document.getElementById('loading-spinner').style.display = 'block';
+                    
+                    const projectFilter = document.getElementById('project-filter').value;
+                    const searchQuery = document.getElementById('photo-search').value;
+                    
+                    // Use our secure API function
+                    const photos = await PhotoAPI.getPhotos(
+                        projectFilter !== 'all' ? projectFilter : null, 
+                        searchQuery
+                    );
+                    
+                    // Display the photos in the gallery
+                    const photosGrid = document.getElementById('photos-container');
+                    photosGrid.innerHTML = '';
+                    
+                    if (photos.length === 0) {
+                        photosGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-camera"></i>
+                                <h3>No photos yet</h3>
+                                <p>Upload your first photo to get started</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    photos.forEach(photo => {
+                        const photoCard = document.createElement('div');
+                        photoCard.className = 'photo-card';
+                        photoCard.innerHTML = `
+                            <div class="photo-container">
+                                <img src="${photo.url}" alt="${photo.description || 'Construction photo'}">
+                                <div class="photo-overlay">
+                                    <button class="btn btn-icon" onclick="viewPhoto('${photo.url}')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-icon" onclick="downloadPhoto('${photo.url}', '${photo.description || 'photo'}')">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn btn-icon" onclick="deletePhoto('${photo.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="photo-details">
+                                <h4>${photo.description || 'Untitled photo'}</h4>
+                                <p>${photo.project_name || 'No project'}</p>
+                                <div class="photo-meta">
+                                    <span><i class="fas fa-calendar-alt"></i> ${new Date(photo.created_at).toLocaleDateString()}</span>
+                                    <span><i class="fas fa-user"></i> ${photo.username || 'Unknown'}</span>
+                                </div>
+                            </div>
+                        `;
+                        photosGrid.appendChild(photoCard);
+                    });
+                    
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    
+                } catch (error) {
+                    console.error('Error in loadPhotos:', error);
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    alert(error.message);
+                }
+            }
+
+            // Load projects for dropdowns
+            async function loadProjectsForDropdown() {
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    
+                    if (!user) return;
+                    
+                    const { data: projects, error } = await supabase
+                        .from('projects')
+                        .select('id, name')
+                        .eq('company_id', user.user_metadata?.company_id)
+                        .order('name');
+                    
+                    if (error) {
+                        console.error('Error loading projects:', error);
+                        return;
+                    }
+                    
+                    // Populate upload project dropdown
+                    const uploadDropdown = document.getElementById('upload-project');
+                    uploadDropdown.innerHTML = '<option value="">Select Project</option>';
+                    
+                    projects.forEach(project => {
+                        const option = document.createElement('option');
+                        option.value = project.id;
+                        option.textContent = project.name;
+                        uploadDropdown.appendChild(option);
+                    });
+                    
+                    // Populate filter dropdown
+                    const filterDropdown = document.getElementById('project-filter');
+                    const currentFilter = filterDropdown.value;
+                    filterDropdown.innerHTML = '<option value="all">All Projects</option>';
+                    
+                    projects.forEach(project => {
+                        const option = document.createElement('option');
+                        option.value = project.id;
+                        option.textContent = project.name;
+                        if (project.id === currentFilter) {
+                            option.selected = true;
+                        }
+                        filterDropdown.appendChild(option);
+                    });
+                    
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                }
+            }
+
+            // View photo in full screen
+            window.viewPhoto = function(url) {
+                window.open(url, '_blank');
+            };
+
+            // Download photo
+            window.downloadPhoto = function(url, name) {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${name}-${new Date().toISOString().slice(0, 10)}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+            // Delete photo using our secure API function
+            window.deletePhoto = async function(photoId) {
+                if (!confirm('Are you sure you want to delete this photo?')) return;
+                
+                try {
+                    await PhotoAPI.deletePhoto(photoId);
+                    alert('Photo deleted successfully!');
+                    loadPhotos();
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            };
+
+            // Set up event listeners for filters
+            document.getElementById('project-filter').addEventListener('change', loadPhotos);
+            document.getElementById('photo-search').addEventListener('input', debounce(loadPhotos, 300));
+            document.getElementById('sort-select').addEventListener('change', loadPhotos);
+
+            // Debounce function for search
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // Load photos and projects when page loads
+            loadPhotos();
+            loadProjectsForDropdown();
+        });
+    </script>
+</body>
+</html>
