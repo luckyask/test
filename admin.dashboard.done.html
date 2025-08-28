@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sierra Suites - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <style>
+        /* Additional styles for security features */
+        .admin-login-prompt {
+            display: none;
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 8px;
+            margin: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-welcome {
+            margin-right: 1rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-badge.active {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .status-badge.inactive {
+            background-color: #6b7280;
+            color: white;
+        }
+        
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+        
+        .btn-secondary {
+            background-color: #6b7280;
+            border-color: #6b7280;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #4b5563;
+            border-color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Login Prompt (hidden by default) -->
+    <div id="adminLogin" class="admin-login-prompt">
+        <h2>Admin Authentication Required</h2>
+        <p>You must have administrator privileges to access this dashboard.</p>
+        <button onclick="window.location.href='login.html'" class="btn btn-primary">Go to Login</button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">Loading...</div>
+    </div>
+
+    <!-- Main Admin Content (hidden by default) -->
+    <div id="adminContent">
+        <header class="admin-header">
+            <h1>The Sierra Suites Admin</h1>
+            <div class="admin-actions">
+                <span id="adminWelcome" class="admin-welcome">Welcome, Admin</span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+        
+        <aside class="admin-sidebar">
+            <nav>
+                <ul class="sidebar-nav">
+                    <li class="active">
+                        <a href="admin-dashboard.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                                <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-companies.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                            </svg>
+                            Companies
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-subscriptions.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                                <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
+                            </svg>
+                            Subscriptions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-analytics.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
+                            </svg>
+                            Analytics
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-support.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                            </svg>
+                            Support
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-settings.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                            </svg>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="admin-main">
+            <h2>Dashboard Overview</h2>
+            
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <h3>Total Companies</h3>
+                    <div class="value" id="totalCompanies">0</div>
+                    <div class="trend up">↑ 12% from last month</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Active Subscriptions</h3>
+                    <div class="value" id="activeSubscriptions">0</div>
+                    <div class="trend up">↑ 8% from last month</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Monthly Revenue</h3>
+                    <div class="value" id="monthlyRevenue">$0</div>
+                    <div class="trend up">↑ 15% from last month</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Active Users</h3>
+                    <div class="value" id="activeUsers">0</div>
+                    <div class="trend up">↑ 10% from last month</div>
+                </div>
+            </div>
+            
+            <h3>Recent Companies</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Join Date</th>
+                        <th>Subscription Tier</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="recentCompanies">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://qjswuwcqyzeuqqqltykz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqc3d1d2NxeXpldXFxcWx0eWt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyMjk0MDUsImV4cCI6MjA3MDgwNTQwNX0.qgH8DMJEoJVuYOXSyr0RAj01Yt7bBR8EYL6qw3YXyAs';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // DOM Elements
+        const adminLogin = document.getElementById('adminLogin');
+        const adminContent = document.getElementById('adminContent');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const adminWelcome = document.getElementById('adminWelcome');
+
+        // Show loading state
+        function showLoading() {
+            loadingOverlay.style.display = 'flex';
+        }
+
+        // Hide loading state
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+
+        // Show login prompt
+        function showLoginPrompt() {
+            adminLogin.style.display = 'block';
+            adminContent.style.display = 'none';
+            hideLoading();
+        }
+
+        // Check if user is admin
+        async function checkAdminAccess() {
+            showLoading();
+            
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+                showLoginPrompt();
+                return false;
+            }
+            
+            try {
+                // Check if user is admin using our secure function
+                const { data: isAdmin, error } = await supabase
+                    .rpc('is_admin', { user_email: user.email });
+                
+                if (error) {
+                    console.error('Error checking admin status:', error);
+                    showLoginPrompt();
+                    return false;
+                }
+                
+                if (isAdmin) {
+                    // User is admin - show dashboard
+                    adminContent.style.display = 'block';
+                    adminLogin.style.display = 'none';
+                    adminWelcome.textContent = `Welcome, ${user.email}`;
+                    await loadAdminData();
+                    hideLoading();
+                    return true;
+                } else {
+                    showLoginPrompt();
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error in admin check:', error);
+                showLoginPrompt();
+                return false;
+            }
+        }
+
+        // Load admin data
+        async function loadAdminData() {
+            try {
+                // Load platform stats using secure function
+                const { data: stats, error: statsError } = await supabase
+                    .rpc('get_platform_stats');
+                
+                if (statsError) throw statsError;
+                
+                if (stats && stats.length > 0) {
+                    document.getElementById('totalCompanies').textContent = stats[0].total_companies;
+                    document.getElementById('activeSubscriptions').textContent = stats[0].active_subscriptions;
+                    document.getElementById('monthlyRevenue').textContent = `$${stats[0].monthly_revenue}`;
+                    document.getElementById('activeUsers').textContent = stats[0].active_users;
+                }
+                
+                // Load recent companies using secure function
+                const { data: companies, error: companiesError } = await supabase
+                    .rpc('get_all_companies_admin');
+                
+                if (companiesError) throw companiesError;
+                
+                const companiesTable = document.getElementById('recentCompanies');
+                if (companies && companies.length > 0) {
+                    companiesTable.innerHTML = companies.slice(0, 5).map(company => `
+                        <tr>
+                            <td>${company.name || 'Unnamed Company'}</td>
+                            <td>${new Date(company.created_at).toLocaleDateString()}</td>
+                            <td>${company.subscription_tier || 'None'}</td>
+                            <td><span class="status-badge ${company.subscription_tier ? 'active' : 'inactive'}">
+                                ${company.subscription_tier ? 'Active' : 'Inactive'}
+                            </span></td>
+                            <td>
+                                <button class="btn btn-small" onclick="viewCompany('${company.id}')">View</button>
+                                <button class="btn btn-small btn-secondary" onclick="editCompany('${company.id}')">Edit</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    companiesTable.innerHTML = '<tr><td colspan="5">No companies found</td></tr>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading admin data:', error);
+                document.getElementById('recentCompanies').innerHTML = 
+                    '<tr><td colspan="5">Error loading data. Please try again.</td></tr>';
+            }
+        }
+
+        // Company actions
+        function viewCompany(companyId) {
+            alert(`View company: ${companyId}`);
+            // Implement company view modal or page
+        }
+
+        function editCompany(companyId) {
+            alert(`Edit company: ${companyId}`);
+            // Implement company edit functionality
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            showLoading();
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Check admin access on page load
+        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+</body>
+</html>

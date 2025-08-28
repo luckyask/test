@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sierra Suites - Admin Support</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <header class="admin-header">
+        <h1>The Sierra Suites Admin</h1>
+        <div class="admin-actions">
+            <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+        </div>
+    </header>
+    
+    <aside class="admin-sidebar">
+        <nav>
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="admin-dashboard.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                            <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-companies.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                        </svg>
+                        Companies
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-subscriptions.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                            <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
+                        </svg>
+                        Subscriptions
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-analytics.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
+                        </svg>
+                        Analytics
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="admin-support.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                        </svg>
+                        Support
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-settings.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                        </svg>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <main class="admin-main">
+        <h2>Customer Support</h2>
+        
+        <div class="form-container">
+            <h3>Recent Support Tickets</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Ticket #</th>
+                        <th>Company</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1245</td>
+                        <td>ABC Construction</td>
+                        <td>Photo upload not working</td>
+                        <td><span class="status-badge warning">Pending</span></td>
+                        <td>2023-11-15</td>
+                        <td><button class="btn btn-secondary btn-sm">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1244</td>
+                        <td>XYZ Builders</td>
+                        <td>Subscription upgrade question</td>
+                        <td><span class="status-badge success">Resolved</span></td>
+                        <td>2023-11-14</td>
+                        <td><button class="btn btn-secondary btn-sm">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1243</td>
+                        <td>Smith & Co</td>
+                        <td>Password reset</td>
+                        <td><span class="status-badge success">Resolved</span></td>
+                        <td>2023-11-14</td>
+                        <td><button class="btn btn-secondary btn-sm">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="form-container">
+            <h3>Knowledge Base</h3>
+            <div class="knowledge-base">
+                <div class="kb-item">
+                    <h4>How to upgrade a subscription</h4>
+                    <p>Step-by-step guide to changing subscription tiers for your clients.</p>
+                    <button class="btn btn-secondary btn-sm">Edit Article</button>
+                </div>
+                <div class="kb-item">
+                    <h4>Resetting user passwords</h4>
+                    <p>Instructions for administrators to reset user passwords.</p>
+                    <button class="btn btn-secondary btn-sm">Edit Article</button>
+                </div>
+                <div class="kb-item">
+                    <h4>Troubleshooting photo uploads</h4>
+                    <p>Common issues and solutions for FieldSnap photo uploads.</p>
+                    <button class="btn btn-secondary btn-sm">Edit Article</button>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary">Add New Article</button>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin-scripts.js"></script>
+</body>
+</html>

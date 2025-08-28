@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sierra Suites - Admin Login</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-brand">
+            <h1>The Sierra Suites</h1>
+            <p>Administrator Portal</p>
+        </div>
+        <form id="adminLoginForm" class="login-form">
+            <div class="form-group">
+                <label for="adminEmail">Admin Email</label>
+                <input type="email" id="adminEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="adminPassword">Password</label>
+                <input type="password" id="adminPassword" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+        <div id="loginError" class="error-message"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin-scripts.js"></script>
+</body>
+</html>
