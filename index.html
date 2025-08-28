@@ -681,7 +681,7 @@
         }
 
         .video-placeholder {
-            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light);
             padding: 5rem;
             color: var(--white);
             font-size: 3.5rem;
@@ -693,7 +693,7 @@
         }
 
         .video-placeholder:hover {
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary-color);
             transform: scale(1.02);
         }
 
@@ -799,6 +799,96 @@
 
         .footer-links a:hover {
             color: var(--white);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            margin-bottom: 0;
+            color: var(--primary-dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            line-height: 1.6;
+        }
+
+        .modal-content h4 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .modal-content p {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .modal-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content li {
+            list-style-type: disc;
+            margin-bottom: 0.5rem;
         }
 
         /* Responsive Design */
@@ -931,7 +1021,7 @@
                     <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#contact">Contact</a></li>
                     <li class="auth-buttons">
-                        <a href="#login" class="btn btn-outline">Login</a>
+                        <a href="login.html" class="btn btn-outline">Login</a>
                         <a href="register.html" class="btn btn-primary">Get Started</a>
                     </li>
                 </ul>
@@ -944,7 +1034,7 @@
                 <a href="#pricing">Pricing</a>
                 <a href="#contact">Contact</a>
                 <div class="auth-buttons">
-                    <a href="#login" class="btn btn-outline">Login</a>
+                    <a href="login.html" class="btn btn-outline">Login</a>
                     <a href="register.html" class="btn btn-primary">Get Started</a>
                 </div>
             </nav>
@@ -1151,6 +1241,142 @@
         </div>
     </section>
 
+    <!-- Terms of Service Modal -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Terms of Service</h3>
+                <button class="modal-close" id="closeTerms">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content">
+                    <p><strong>Last Updated: January 1, 2023</strong></p>
+                    
+                    <h4>1. Agreement to Terms</h4>
+                    <p>By accessing or using The Sierra Suites ("Service"), you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing our Service.</p>
+                    
+                    <h4>2. Use License</h4>
+                    <p>Permission is granted to temporarily use The Sierra Suites for your business operations. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+                    <ul>
+                        <li>Modify or copy the materials;</li>
+                        <li>Use the materials for any commercial purpose or for any public display;</li>
+                        <li>Attempt to reverse engineer any software contained on The Sierra Suites;</li>
+                        <li>Remove any copyright or other proprietary notations from the materials; or</li>
+                        <li>Transfer the materials to another person or "mirror" the materials on any other server.</li>
+                    </ul>
+                    
+                    <h4>3. Account Registration</h4>
+                    <p>To access certain features of our Service, you must register for an account. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.</p>
+                    
+                    <h4>4. Subscription and Payment</h4>
+                    <p>Certain aspects of the Service may be provided for a fee. You agree to pay all applicable fees in accordance with these Terms and the pricing terms provided to you. All fees are non-refundable except as required by law or as otherwise stated in our refund policy.</p>
+                    
+                    <h4>5. User Content</h4>
+                    <p>You retain all rights to any content you submit, post or display on or through the Service. By submitting, posting or displaying content on or through the Service, you grant us a worldwide, non-exclusive, royalty-free license to use, copy, reproduce, process, adapt, modify, publish, transmit, display and distribute such content.</p>
+                    
+                    <h4>6. Intellectual Property</h4>
+                    <p>The Service and its original content, features, and functionality are and will remain the exclusive property of The Sierra Suites and its licensors. The Service is protected by copyright, trademark, and other laws of both the United States and foreign countries.</p>
+                    
+                    <h4>7. Termination</h4>
+                    <p>We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.</p>
+                    
+                    <h4>8. Limitation of Liability</h4>
+                    <p>In no event shall The Sierra Suites, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>
+                    
+                    <h4>9. Governing Law</h4>
+                    <p>These Terms shall be governed and construed in accordance with the laws of the State of California, United States, without regard to its conflict of law provisions.</p>
+                    
+                    <h4>10. Changes to Terms</h4>
+                    <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms.</p>
+                    
+                    <h4>11. Contact Information</h4>
+                    <p>If you have any questions about these Terms, please contact us at legal@thesierrasuites.com.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal-overlay" id="privacyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Privacy Policy</h3>
+                <button class="modal-close" id="closePrivacy">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-content">
+                    <p><strong>Last Updated: January 1, 2023</strong></p>
+                    
+                    <h4>1. Introduction</h4>
+                    <p>The Sierra Suites ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by The Sierra Suites.</p>
+                    
+                    <h4>2. Information We Collect</h4>
+                    <p>We collect information you provide directly to us, including when you create an account, update your profile, use our services, or communicate with us. This information may include:</p>
+                    <ul>
+                        <li>Name, email address, and contact information</li>
+                        <li>Company information and business details</li>
+                        <li>Payment information and billing details</li>
+                        <li>Project data, construction documentation, and team information</li>
+                        <li>Communications with our support team</li>
+                    </ul>
+                    
+                    <h4>3. How We Use Your Information</h4>
+                    <p>We may use the information we collect for various purposes, including to:</p>
+                    <ul>
+                        <li>Provide, maintain, and improve our services</li>
+                        <li>Process transactions and send related information</li>
+                        <li>Send you technical notices, updates, and support messages</li>
+                        <li>Respond to your comments, questions, and requests</li>
+                        <li>Monitor and analyze trends, usage, and activities</li>
+                        <li>Detect, investigate, and prevent fraudulent transactions</li>
+                    </ul>
+                    
+                    <h4>4. Information Sharing</h4>
+                    <p>We may share your personal information with:</p>
+                    <ul>
+                        <li>Service providers who perform services on our behalf</li>
+                        <li>Professional advisors such as lawyers and accountants</li>
+                        <li>Law enforcement or other third parties when required by law</li>
+                        <li>Other users in your company as part of the service functionality</li>
+                    </ul>
+                    <p>We do not sell your personal information to third parties.</p>
+                    
+                    <h4>5. Data Security</h4>
+                    <p>We implement appropriate technical and organizational measures to protect the security of your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+                    
+                    <h4>6. Data Retention</h4>
+                    <p>We will retain your personal information only for as long as is necessary for the purposes set out in this Privacy Policy, or as required to comply with our legal obligations, resolve disputes, and enforce our agreements.</p>
+                    
+                    <h4>7. Your Rights</h4>
+                    <p>Depending on your location, you may have the right to:</p>
+                    <ul>
+                        <li>Access and receive a copy of your personal information</li>
+                        <li>Rectify or update inaccurate personal information</li>
+                        <li>Request deletion of your personal information</li>
+                        <li>Restrict or object to our processing of your personal information</li>
+                        <li>Data portability</li>
+                    </ul>
+                    
+                    <h4>8. Cookies and Tracking Technologies</h4>
+                    <p>We use cookies and similar tracking technologies to track activity on our Service and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
+                    
+                    <h4>9. Children's Privacy</h4>
+                    <p>Our Service does not address anyone under the age of 18. We do not knowingly collect personally identifiable information from anyone under the age of 18.</p>
+                    
+                    <h4>10. Changes to This Privacy Policy</h4>
+                    <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+                    
+                    <h4>11. Contact Us</h4>
+                    <p>If you have any questions about this Privacy Policy, please contact us at privacy@thesierrasuites.com.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -1166,8 +1392,6 @@
                     <ul>
                         <li><a href="#features">Features</a></li>
                         <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#demo">Demo</a></li>
-                        <li><a href="#">Updates</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -1175,25 +1399,22 @@
                     <ul>
                         <li><a href="#">About Us</a></li>
                         <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Press</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Support</h4>
                     <ul>
-                        <li><a href="#">Help Center</a></li>
                         <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#" class="privacy-link">Privacy Policy</a></li>
+                        <li><a href="#" class="terms-link">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2023 The Sierra Suites. All rights reserved.</p>
                 <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+                    <a href="#" class="privacy-link">Privacy Policy</a>
+                    <a href="#" class="terms-link">Terms of Service</a>
                     <a href="#">Cookie Policy</a>
                 </div>
             </div>
@@ -1276,6 +1497,63 @@
                     link.classList.add('active');
                 }
             });
+        });
+
+        // Modal functionality
+        const termsModal = document.getElementById('termsModal');
+        const privacyModal = document.getElementById('privacyModal');
+        const termsLinks = document.querySelectorAll('.terms-link');
+        const privacyLinks = document.querySelectorAll('.privacy-link');
+        const closeTerms = document.getElementById('closeTerms');
+        const closePrivacy = document.getElementById('closePrivacy');
+
+        // Open Terms modal
+        termsLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                termsModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Open Privacy modal
+        privacyLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                privacyModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close Terms modal
+        closeTerms.addEventListener('click', function() {
+            termsModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close Privacy modal
+        closePrivacy.addEventListener('click', function() {
+            privacyModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal when clicking outside
+        [termsModal, privacyModal].forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                termsModal.classList.remove('active');
+                privacyModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
         });
     </script>
 </body>
